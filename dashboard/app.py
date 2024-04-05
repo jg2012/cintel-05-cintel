@@ -81,14 +81,14 @@ def reactive_calc_combined():
 # Call the ui.page_opts() function
 # Set title to a string in quotes that will appear at the top
 # Set fillable to True to use the whole page width for the UI
-ui.page_opts(title="PyShiny Express: Live Data Example", fillable=True)
+ui.page_opts(title="Jose Guzman's: Live Data Example", fillable=True)
 
 # Sidebar is typically used for user interaction/information
 # Note the with statement to create the sidebar followed by a colon
 # Everything in the sidebar is indented consistently
 with ui.sidebar(open="open"):
 
-    ui.h2("Omaha Explorer", class_="text-center")
+    ui.h2("Omaha Weather Explorer", class_="text-center")
     ui.p(
         "A demonstration of real-time temperature readings in Omaha, NE.",
         class_="text-center",
@@ -116,8 +116,8 @@ with ui.sidebar(open="open"):
 
 with ui.layout_columns():
     with ui.value_box(
-        showcase=icon_svg("sun"),
-        theme="bg-gradient-blue-purple",
+        showcase=icon_svg("cloud"),
+        theme="bg-gradient-blue-orange",
     ):
 
         "Current Temperature"
@@ -128,22 +128,25 @@ with ui.layout_columns():
             deque_snapshot, df, latest_dictionary_entry = reactive_calc_combined()
             return f"{latest_dictionary_entry['temp']} F"
 
-        "warmer than usual"
+        "Is it raining, is it snowing? Is a hurricane a-blowing? - Willy Wonka" 
 
   
 
-    with ui.card(full_screen=True):
+    with ui.card(full_screen=True, style="background-color: lightgray"):
         ui.card_header("Current Date and Time")
 
         @render.text
         def display_time():
-            """Get the latest reading and return a timestamp string"""
-            deque_snapshot, df, latest_dictionary_entry = reactive_calc_combined()
-            return f"{latest_dictionary_entry['timestamp']}"
+           """Get the latest reading and return a timestamp string"""
+           deque_snapshot, df, latest_dictionary_entry = reactive_calc_combined()
+           timestamp = latest_dictionary_entry['timestamp']
+           date_string = timestamp.split()[0]  # Extracting date
+           time_string = timestamp.split()[1]  # Extracting time
+           return f"Date: {date_string}\nTime: {time_string}"
 
 
 #with ui.card(full_screen=True, min_height="40%"):
-with ui.card(full_screen=True):
+with ui.card(full_screen=True , style="background-color: lightgray"):
     ui.card_header("Most Recent Readings")
 
     @render.data_frame
@@ -153,7 +156,7 @@ with ui.card(full_screen=True):
         pd.set_option('display.width', None)        # Use maximum width
         return render.DataGrid( df,width="100%")
 
-with ui.card():
+with ui.card(style="background-color: lightgray"):
     ui.card_header("Chart with Current Trend")
 
     @render_plotly
@@ -172,7 +175,7 @@ with ui.card():
                              y="temp",
                              title="Temperature Readings with Regression Line",
                              labels={"temp": "Temperature (°F)", "timestamp": "Time"},
-                             color_discrete_sequence=["blue"])
+                             color_discrete_sequence=["black"])
 
             # Linear regression
             sequence = range(len(df))
@@ -184,6 +187,20 @@ with ui.card():
 
             # Add the regression line to the figure
             fig.add_scatter(x=df["timestamp"], y=df['best_fit_line'], mode='lines', name='Regression Line')
+
+            # Label the regression line with its formula
+            annotation_text = f'y = {slope:.2f}x + {intercept:.2f}'
+            fig.add_annotation(x=df["timestamp"].iloc[int(len(df) / 2)],  # Position the annotation at the midpoint of the x-axis
+                               y=df['best_fit_line'].iloc[int(len(df) / 2)],  # Position the annotation at the midpoint of the regression line
+                               text=annotation_text,
+                               showarrow=False,
+                               font=dict(size=12, color="blue"),  # Set font properties
+                               align="center",  # Center align the annotation text
+                               bgcolor="lightblue",  # Set background color of the annotation
+                               bordercolor="blue",  # Set border color of the annotation
+                               borderwidth=1,  # Set border width of the annotation
+                               borderpad=4  # Set padding of the border
+                               )
 
             # Update layout as needed to customize further
             fig.update_layout(xaxis_title="Time", yaxis_title="Temperature (°F)")
