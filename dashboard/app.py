@@ -90,7 +90,7 @@ def reactive_calc_combined():
 # Set title to a string in quotes that will appear at the top
 # Set fillable to True to use the whole page width for the UI
 
-ui.page_opts(title="PyShiny Express: Live Data With Value Card (Font Awesome Icon + 3 strings)", fillable=True)
+ui.page_opts(title="Jose Guzman's Live Data", fillable=True)
 
 # Sidebar is typically used for user interaction/information
 # Note the with statement to create the sidebar followed by a colon
@@ -107,15 +107,15 @@ with ui.sidebar(open="open"):
   ui.h6("Links:")
   ui.a(
         "GitHub Source",
-        href="https://github.com/denisecase/cintel-05-cintel-fancy",
+        href="https://github.com/jg2012/cintel-05-cintel",
         target="_blank",
   )
   ui.a(
         "GitHub App",
-        href="https://denisecase.github.io/cintel-05-cintel-fancy/",
+        href="https://github.com/jg2012/cintel-05-cintel/blob/main/dashboard/app.py",
         target="_blank",
   )
-  ui.a("PyShiny", href="https://shiny.posit.co/py/", target="_blank")
+  ui.a("PyShiny", href="https://jg2012.github.io/cintel-05-cintel/", target="_blank")
 
 # In Shiny Express, everything not in the sidebar is in the main panel
 
