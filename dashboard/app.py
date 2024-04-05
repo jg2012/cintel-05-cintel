@@ -207,6 +207,6 @@ with ui.card(style="background-color: lightgray"):
 
             return fig
 
-        # If DataFrame is empty, return an empty figure
+        # If DataFrame is empty, return an empty figure.
         else:
             return px.scatter(title="No Data Available")
